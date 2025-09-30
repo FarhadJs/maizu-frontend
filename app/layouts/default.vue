@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { useTheme } from 'vuetify';
 import { ref, onMounted } from 'vue';
+import { useAuthStore } from '../stores/auth'; // <--- ایمپورت Auth Store
+import { useRouter } from 'vue-router'; // <--- ایمپورت useRouter برای هدایت پس از خروج
 
 const vuetifyTheme = useTheme();
 const isDark = ref(false);
+const authStore = useAuthStore(); // <--- استفاده از Auth Store
+const router = useRouter();
 
-onMounted(() => {
-        if (import.meta.client) { // اطمینان حاصل شود که این کد فقط در کلاینت اجرا می‌شود
+onMounted(() => { /* ... (منطق تغییر تم بدون تغییر) ... */
+        if (import.meta.client) {
                 if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                         isDark.value = true;
                         document.documentElement.classList.add('dark');
@@ -19,8 +23,8 @@ onMounted(() => {
         }
 });
 
-function toggleTheme() {
-        if (import.meta.client) { // اطمینان حاصل شود که این کد فقط در کلاینت اجرا می‌شود
+function toggleTheme() { /* ... (منطق تغییر تم بدون تغییر) ... */
+        if (import.meta.client) {
                 isDark.value = !isDark.value;
                 if (isDark.value) {
                         document.documentElement.classList.add('dark');
@@ -33,6 +37,14 @@ function toggleTheme() {
                 }
         }
 }
+
+// متد برای مدیریت خروج
+async function handleLogout() {
+        const loggedOut = await authStore.logout();
+        if (loggedOut) {
+                router.push('/login'); // هدایت به صفحه ورود پس از خروج موفق
+        }
+}
 </script>
 
 <template>
@@ -43,12 +55,14 @@ function toggleTheme() {
                         <v-btn icon @click="toggleTheme">
                                 <v-icon>{{ isDark ? 'mdi-white-balance-sunny' : 'mdi-weather-night' }}</v-icon>
                         </v-btn>
+                        <!-- <--- نمایش دکمه خروج اگر کاربر لاگین است --- > -->
+                        <v-btn v-if="authStore.isAuthenticated" class="ml-2" @click="handleLogout">
+                                خروج
+                        </v-btn>
                 </v-app-bar>
                 <v-main>
                         <v-container>
-                                <!-- NuxtPage اینجا قرار می‌گیرد تا محتوای صفحات را در داخل Layout رندر کند -->
                                 <slot />
-                               
                         </v-container>
                 </v-main>
         </v-app>

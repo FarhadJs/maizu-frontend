@@ -8,11 +8,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
-  modules: [
-    "@nuxt/eslint",
-    "@nuxt/image",
-    "@nuxtjs/tailwindcss",
-  ],
+  modules: ["@nuxt/eslint", "@nuxt/image", "@nuxtjs/tailwindcss", "@pinia/nuxt"],
   vite: {
     plugins: [tsconfigPaths()],
     resolve: {
