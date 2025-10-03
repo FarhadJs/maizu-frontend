@@ -81,7 +81,7 @@ async function submitSetupForm() {
 <template>
   <!-- ... (Template بدون تغییر، مطمئن شوید تگ‌های v-text-field self-closing هستند) -->
   <v-locale-provider rtl>
-    <v-app class="bg-grey-lighten-3">
+    <v-app>
       <v-main class="d-flex align-center justify-center">
         <v-card class="pa-6" width="450" flat>
           <v-card-title class="text-h5 text-center mb-4">

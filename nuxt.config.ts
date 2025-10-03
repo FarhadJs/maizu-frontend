@@ -1,21 +1,28 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { transformAssetUrls } from 'vite-plugin-vuetify'
-import { fileURLToPath } from 'url';
-import tsconfigPaths from 'vite-tsconfig-paths'
+import { transformAssetUrls } from "vite-plugin-vuetify";
+import { fileURLToPath } from "url";
+import tsconfigPaths from "vite-tsconfig-paths";
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   build: {
-    transpile: ['vuetify'],
+    transpile: ["vuetify"],
   },
-  modules: ["@nuxt/eslint", "@nuxt/image", "@nuxtjs/tailwindcss", "@pinia/nuxt"],
+  modules: [
+    "@nuxt/eslint",
+    "@nuxt/image",
+    "@nuxtjs/tailwindcss",
+    "@pinia/nuxt",
+    "@nuxt/icon",
+    "nuxt-swiper",
+  ],
   vite: {
     plugins: [tsconfigPaths()],
     resolve: {
       alias: {
-        '~': fileURLToPath(new URL('./', import.meta.url)),
-        '@': fileURLToPath(new URL('./', import.meta.url)),
-      }
+        "~": fileURLToPath(new URL("./", import.meta.url)),
+        "@": fileURLToPath(new URL("./", import.meta.url)),
+      },
     },
     vue: {
       template: {
@@ -26,7 +33,7 @@ export default defineNuxtConfig({
   css: [
     "vuetify/lib/styles/main.sass", // اضافه کردن استایل‌های اصلی Vuetify
     "@mdi/font/css/materialdesignicons.min.css", // اضافه کردن آیکون‌ها
-    "../assets/css/main.css", // اضافه کردن فایل CSS Tailwind
+    "./app/assets/css/main.css", // اضافه کردن فایل CSS Tailwind
   ],
   postcss: {
     plugins: {
@@ -34,7 +41,30 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  plugins: [
-  "../app/plugins/vuetify.ts"
-  ]
+
+  icon: {
+    customCollections: [
+      {
+        prefix: "maizu-icons",
+        dir: "./app/assets/icons",
+      },
+    ],
+  },
+
+  image: {
+    // برای تصاویر محلی، provider پیش‌فرض IPX کافیه
+    provider: "ipx", // یا 'static' برای سادگی
+    // اگر تصاویر خارجی داری، دامنه‌ها رو whitelist کن
+    domains: ["example.com"], // اختیاری
+    // preset برای اندازه‌های رایج
+    presets: {
+      thumbnail: {
+        modifiers: {
+          width: 300,
+          height: 300,
+        },
+      },
+    },
+  },
+  plugins: ["../app/plugins/vuetify.ts"],
 });

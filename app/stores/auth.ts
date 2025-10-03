@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { ofetch } from "ofetch";
 
 interface User {
-  id: string;
+  _id: string;
   phoneNumber: string;
   role: string;
   isProfileCompleted: boolean;
@@ -35,7 +35,7 @@ export const useAuthStore = defineStore("auth", {
   },
   actions: {
     // این متد وضعیت کاربر فعلی را از Back-end دریافت می‌کند
-    async fetchUser() {
+    async fetchUser(): Promise<User | undefined> {
       this.isLoading = true;
       this.error = null;
       try {
