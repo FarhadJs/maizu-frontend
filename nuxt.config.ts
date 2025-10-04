@@ -46,7 +46,7 @@ export default defineNuxtConfig({
     customCollections: [
       {
         prefix: "maizu-icons",
-        dir: "./app/assets/icons",
+        dir: "./app/assets/maizu-icons",
       },
     ],
   },

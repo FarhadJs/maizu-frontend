@@ -14,27 +14,27 @@ const drawer = ref(false);
 const productCategories = [
   {
     title: "محصولات الکترونیکی",
-    link: "/products/electronics",
+    link: "/",
     subCategories: [
-      { title: "موبایل", link: "/products/electronics/mobile" },
-      { title: "لپ‌تاپ", link: "/products/electronics/laptop" },
-      { title: "لوازم جانبی", link: "/products/electronics/accessories" },
+      { title: "موبایل", link: "/" },
+      { title: "لپ‌تاپ", link: "/" },
+      { title: "لوازم جانبی", link: "/" },
     ],
   },
   {
     title: "لباس و مد",
-    link: "/products/fashion",
+    link: "/",
     subCategories: [
-      { title: "مردانه", link: "/products/fashion/men" },
-      { title: "زنانه", link: "/products/fashion/women" },
+      { title: "مردانه", link: "/" },
+      { title: "زنانه", link: "/" },
     ],
   },
   {
     title: "کتاب‌ها",
-    link: "/products/books",
+    link: "/",
     subCategories: [
-      { title: "رمان", link: "/products/books/novel" },
-      { title: "علمی", link: "/products/books/science" },
+      { title: "رمان", link: "/" },
+      { title: "علمی", link: "/" },
     ],
   },
 ];
@@ -139,34 +139,43 @@ function onSearch() {
           </NuxtLink>
         </div>
 
-        <div class="flex flex-row-reverse items-center gap-5 mr-4 mt-5">
-          <v-btn class="flex items-center" @click="drawer = !drawer">
-            <p>دسته بندی محصولات</p>
-            <Icon name="heroicons:bars-3-16-solid" class="text-2xl ml-5" />
-          </v-btn>
+        <div class="flex flex-row-reverse items-center justify-between gap-5 mr-4 mt-5">
+          <div class="flex flex-row-reverse">
+            <v-btn class="flex items-center" @click="drawer = !drawer">
+              <p>دسته بندی محصولات</p>
+              <Icon name="heroicons:bars-3-16-solid" class="text-2xl ml-5" />
+            </v-btn>
 
-          <v-btn
-            ><p class="mr-2">کامپیوتر</p>
-            <Icon name="carbon:screen" />
-          </v-btn>
-          <v-btn
-            ><p class="mr-2">لپ تاپ</p>
-            <Icon name="carbon:laptop" />
-          </v-btn>
-          <v-btn
-            ><p class="mr-2">موبایل</p>
-            <Icon name="heroicons:device-phone-mobile" />
-          </v-btn>
-          <v-btn
-            ><p class="mr-2">کنسول</p>
-            <Icon name="carbon:game-console" />
-          </v-btn>
-          <v-btn
-            ><p class="mr-2">خدمات و تعمیرات کامپیوتر</p>
-            <Icon name="carbon:cloud-monitoring" />
+            <v-btn
+              ><p class="mr-2">کامپیوتر</p>
+              <Icon name="carbon:screen" />
+            </v-btn>
+            <v-btn
+              ><p class="mr-2">لپ تاپ</p>
+              <Icon name="carbon:laptop" />
+            </v-btn>
+            <v-btn
+              ><p class="mr-2">موبایل</p>
+              <Icon name="heroicons:device-phone-mobile" />
+            </v-btn>
+            <v-btn
+              ><p class="mr-2">کنسول</p>
+              <Icon name="carbon:game-console" />
+            </v-btn>
+            <v-btn
+              ><p class="mr-2">خدمات و تعمیرات کامپیوتر</p>
+              <Icon name="carbon:cloud-monitoring" />
+            </v-btn>
+          </div>
+          <v-btn dir="rtl" class="ml-4">
+            <span dir="ltr">035 372* ****</span>
+            <p class="mr-2">: پشتیبانی</p>
+            <Icon name="streamline:customer-support-1" class="mr-3" />
           </v-btn>
         </div>
       </div>
+
+      <!-- <v-spacer /> -->
     </v-app-bar>
     <v-main>
       <v-container>

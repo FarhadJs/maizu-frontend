@@ -30,7 +30,9 @@
 
           <v-list>
             <v-list-item>
-              <NuxtLink @click="menu = false" to="/Dashboard">داشبورد</NuxtLink>
+              <v-btn>
+                <NuxtLink @click="menu = false" to="/Dashboard">داشبورد</NuxtLink>
+              </v-btn>
             </v-list-item>
           </v-list>
           <v-card-actions class="flex justify-between border-t">
