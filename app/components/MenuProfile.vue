@@ -16,13 +16,13 @@
             <v-list-item
               prepend-avatar="https://cdn.vuetifyjs.com/images/john.jpg"
               :subtitle="
-                user_info!.role == 'super_admin'
+                user_info.role == 'super_admin'
                   ? 'مالک'
-                    : user_info!.role == 'admin'
-                      ? 'ادمین'
-                      : 'مشتری'
+                  : user_info.role == 'admin'
+                  ? 'ادمین'
+                  : 'مشتری'
               "
-              :title="user_info!.firstName + ' ' + user_info!.lastName"
+              :title="user_info.firstName + ' ' + user_info.lastName"
             />
           </v-list>
 
@@ -31,7 +31,7 @@
           <v-list>
             <v-list-item>
               <v-btn>
-                <NuxtLink @click="menu = false" to="/Dashboard">داشبورد</NuxtLink>
+                <NuxtLink to="/Dashboard" @click="menu = false">داشبورد</NuxtLink>
               </v-btn>
             </v-list-item>
           </v-list>
@@ -54,11 +54,10 @@
     </div>
   </v-locale-provider>
 </template>
-<script setup lang="ts">
+<script setup>
 import { ref } from "vue";
 import { useTheme } from "vuetify";
 import { useAuthStore } from "../stores/auth";
-import type { User } from "../types/User.type";
 // import { useRouter } from "vue-router";
 
 // const router = useRouter();
@@ -66,7 +65,7 @@ const menu = ref(false);
 const vuetifyTheme = useTheme();
 const authStore = useAuthStore();
 const isDark = ref(false);
-const user_info = ref<User | undefined>(undefined);
+const user_info = ref(undefined);
 
 // {
 //     "id": "68db9de82fdd10c41a6454fe",
@@ -98,7 +97,7 @@ onMounted(() => {
     }
   }
 
-  authStore.fetchUser().then((res: User) => {
+  authStore.fetchUser().then((res) => {
     user_info.value = res;
   });
 });

@@ -1,12 +1,13 @@
+<!-- eslint-disable nuxt/prefer-import-meta -->
 <script setup lang="ts">
 import { useTheme } from "vuetify";
 import { ref, onMounted } from "vue";
-import { useAuthStore } from "../stores/auth"; // <--- ایمپورت Auth Store // <--- ایمپورت useRouter برای هدایت پس از خروج
+import { useAuthStore } from "../stores/auth";
 import MenuProfileVue from "../components/MenuProfile.vue";
 
 const vuetifyTheme = useTheme();
 const isDark = ref(false);
-const authStore = useAuthStore(); // <--- استفاده از Auth Store
+const authStore = useAuthStore();
 const loaded = ref(false);
 const loading = ref(false);
 const drawer = ref(false);
@@ -40,7 +41,6 @@ const productCategories = [
 ];
 
 onMounted(() => {
-  /* ... (منطق تغییر تم بدون تغییر) ... */
   if (import.meta.client) {
     if (
       localStorage.getItem("theme") === "dark" ||
@@ -49,13 +49,11 @@ onMounted(() => {
     ) {
       isDark.value = true;
       document.documentElement.classList.add("dark");
-      vuetifyTheme.change("dark");
-      // vuetifyTheme.global.name.value = "dark";
+      vuetifyTheme.change("dark"); // فیکس deprecation
     } else {
       isDark.value = false;
       document.documentElement.classList.remove("dark");
       vuetifyTheme.change("light");
-      // vuetifyTheme.global.name.value = "light";
     }
   }
 });
@@ -66,12 +64,10 @@ function toggleTheme() {
     if (isDark.value) {
       document.documentElement.classList.add("dark");
       localStorage.setItem("theme", "dark");
-      // vuetifyTheme.global.name.value = "dark";
       vuetifyTheme.change("dark");
     } else {
       document.documentElement.classList.remove("dark");
       localStorage.setItem("theme", "light");
-      // vuetifyTheme.global.name.value = "light";
       vuetifyTheme.change("light");
     }
   }
@@ -111,7 +107,7 @@ function updateRoute(name: string) {
 <template>
   <v-app :theme="vuetifyTheme.global.name.value">
     <v-app-bar class="custom-app-bar">
-      <div class="flex flex-column w-full lg:mt-3">
+      <div class="flex flex-column w-full lg:mt-1">
         <div class="flex items-center">
           <v-btn
             style="background-color: #293896"
@@ -121,26 +117,32 @@ function updateRoute(name: string) {
             <Icon name="carbon:shopping-cart" class="text-2xl" />
           </v-btn>
 
-          <v-btn
-            v-if="!authStore.isAuthenticated"
-            style="background-color: #293896; color: white; height: 3rem"
-            class="desktop-view"
-            ><NuxtLink to="/login"> ورود | ثبت نام</NuxtLink></v-btn
-          >
-          <MenuProfileVue v-if="authStore.isAuthenticated" class="desktop-view" />
+          <client-only>
+            <template v-if="!authStore.isAuthenticated">
+              <v-btn
+                v-if="!authStore.isAuthenticated"
+                style="background-color: #293896; color: white; height: 3rem"
+                class="desktop-view"
+                ><NuxtLink to="/login"> ورود | ثبت نام</NuxtLink></v-btn
+              >
+            </template>
+            <MenuProfileVue v-if="authStore.isAuthenticated" class="desktop-view" />
+          </client-only>
 
-          <div
-            v-if="!authStore.isAuthenticated"
-            class="desktop-view flex items-center gap-3 ml-5"
-          >
-            <v-icon :icon="isDark ? 'mdi-white-balance-sunny' : 'mdi-weather-night'" />
-            <v-switch
-              v-model="isDark"
-              color="primary"
-              hide-details
-              @click="toggleTheme"
-            />
-          </div>
+          <client-only>
+            <div
+              
+              class="hidden lg:!flex items-center gap-3 ml-5"
+            >
+              <v-icon :icon="isDark ? 'mdi-white-balance-sunny' : 'mdi-weather-night'" />
+              <v-switch
+                v-model="isDark"
+                color="primary"
+                hide-details
+                @click="toggleTheme"
+              />
+            </div>
+          </client-only>
           <button
             style="background-color: #293896; color: white"
             class="mobile-view ml-4 !w-10 p-2 rounded flex items-center justify-center"
@@ -149,25 +151,28 @@ function updateRoute(name: string) {
           </button>
 
           <v-spacer />
-          <div class="hidden lg:block lg:w-[40%] relative mr-5">
-            <v-locale-provider rtl>
-              <v-card-text>
-                <v-text-field
-                  :loading="loading"
-                  append-inner-icon="mdi-magnify"
-                  density="compact"
-                  label="جست و جو کنید"
-                  variant="solo"
-                  hide-details
-                  single-line
-                  dir="rtl"
-                  bg-color="#293896"
-                  class="h-12"
-                  @click:append-inner="onSearch"
-                />
-              </v-card-text>
-            </v-locale-provider>
-          </div>
+
+          <client-only>
+            <div class="hidden lg:block lg:w-[40%] relative mr-5">
+              <v-locale-provider :rtl="true">
+                <v-card-text>
+                  <v-text-field
+                    :loading="loading"
+                    append-inner-icon="mdi-magnify"
+                    density="compact"
+                    label="جست و جو کنید"
+                    variant="solo"
+                    hide-details
+                    single-line
+                    dir="rtl"
+                    bg-color="#293896"
+                    class="h-12"
+                    @click:append-inner="onSearch"
+                  />
+                </v-card-text>
+              </v-locale-provider>
+            </div>
+          </client-only>
           <NuxtLink to="/">
             <NuxtImg
               src="/images/brand-2.png"
@@ -218,69 +223,75 @@ function updateRoute(name: string) {
       </div>
     </v-app-bar>
     <v-main>
-      <v-container>
-        <v-locale-provider class="desktop-view" rtl>
-          <v-navigation-drawer
-            v-model="drawer"
-            location="right"
-            temporary
-            class="lg:mt-10"
-          >
-            <v-btn v-if="drawer" icon class="close-btn" @click="drawer = false">
-              <Icon name="heroicons:x-mark-20-solid" class="text-2xl" />
-            </v-btn>
-            <div class="sidebar-content">
-              <v-list nav class="category-list">
-                <v-list-item
-                  v-for="(category, index) in productCategories"
-                  :key="index"
-                  class="category-item"
-                >
-                  <v-menu open-on-hover location="start" :close-on-content-click="false">
-                    <template #activator="{ props }">
-                      <v-list-item-title
-                        v-bind="props"
-                        style="
-                          padding: 10px;
-                          font-size: large;
-                          font-weight: 500;
-                          width: 14rem;
-                          display: flex;
-                          justify-content: space-between;
-                          align-items: center;
-                        "
-                        class="hover:bg-[#00b9ec2a] focus-within:bg-[#00b9ec2a] dark:hover:bg-[#00b9ec9f] dark:focus-within:bg-[#00b9ec9f] rounded"
-                      >
-                        <NuxtLink
-                          :to="category.link"
-                          class="p-2 w-full"
-                          @click="navigateTo(category.link)"
+      <client-only>
+        <v-container>
+          <v-locale-provider class="desktop-view" :rtl="true">
+            <v-navigation-drawer
+              v-model="drawer"
+              location="right"
+              temporary
+              class="lg:mt-10"
+            >
+              <v-btn v-if="drawer" icon class="close-btn" @click="drawer = false">
+                <Icon name="heroicons:x-mark-20-solid" class="text-2xl" />
+              </v-btn>
+              <div class="sidebar-content">
+                <v-list nav class="category-list">
+                  <v-list-item
+                    v-for="(category, index) in productCategories"
+                    :key="index"
+                    class="category-item"
+                  >
+                    <v-menu
+                      open-on-hover
+                      location="start"
+                      :close-on-content-click="false"
+                    >
+                      <template #activator="{ props }">
+                        <v-list-item-title
+                          v-bind="props"
+                          style="
+                            padding: 10px;
+                            font-size: large;
+                            font-weight: 500;
+                            width: 14rem;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                          "
+                          class="hover:bg-[#00b9ec2a] focus-within:bg-[#00b9ec2a] dark:hover:bg-[#00b9ec9f] dark:focus-within:bg-[#00b9ec9f] rounded"
                         >
-                          <p>{{ category.title }}</p>
-                        </NuxtLink>
-                        <v-icon><Icon name="heroicons:chevron-left-16-solid" /></v-icon>
-                      </v-list-item-title>
-                    </template>
-                    <v-list class="submenu">
-                      <v-list-item
-                        v-for="(subItem, subIndex) in category.subCategories"
-                        :key="subIndex"
-                        @click="navigateTo(subItem.link)"
-                      >
-                        <v-list-item-title class="submenu-title">
-                          {{ subItem.title }}
+                          <NuxtLink
+                            :to="category.link"
+                            class="p-2 w-full"
+                            @click="navigateTo(category.link)"
+                          >
+                            <p>{{ category.title }}</p>
+                          </NuxtLink>
+                          <v-icon><Icon name="heroicons:chevron-left-16-solid" /></v-icon>
                         </v-list-item-title>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                </v-list-item>
-              </v-list>
-            </div>
-          </v-navigation-drawer>
-        </v-locale-provider>
-        <slot />
-        <NavigationMobile @change-route="updateRoute" />
-      </v-container>
+                      </template>
+                      <v-list class="submenu">
+                        <v-list-item
+                          v-for="(subItem, subIndex) in category.subCategories"
+                          :key="subIndex"
+                          @click="navigateTo(subItem.link)"
+                        >
+                          <v-list-item-title class="submenu-title">
+                            {{ subItem.title }}
+                          </v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-list-item>
+                </v-list>
+              </div>
+            </v-navigation-drawer>
+          </v-locale-provider>
+          <slot />
+          <NavigationMobile @change-route="updateRoute" />
+        </v-container>
+      </client-only>
     </v-main>
   </v-app>
 </template>

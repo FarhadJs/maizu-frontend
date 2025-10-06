@@ -1,60 +1,69 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { transformAssetUrls } from "vite-plugin-vuetify";
-import { fileURLToPath } from "url";
-import tsconfigPaths from "vite-tsconfig-paths";
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
-  devtools: { enabled: true },
-  build: {
-    transpile: ["vuetify"],
-  },
+  devtools: { enabled: false },
   app: {
     head: {
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     },
   },
-  modules: [
-    "@nuxt/eslint",
-    "@nuxt/image",
-    "@nuxtjs/tailwindcss",
-    "@pinia/nuxt",
-    "@nuxt/icon",
-    "nuxt-swiper",
-  ],
-  vite: {
-    plugins: [tsconfigPaths()],
-    resolve: {
-      alias: {
-        "~": fileURLToPath(new URL("./", import.meta.url)),
-        "@": fileURLToPath(new URL("./", import.meta.url)),
+modules: [
+  "@nuxt/eslint",
+  "@nuxt/image",
+  "@nuxtjs/tailwindcss",
+  "@pinia/nuxt",
+  "@nuxt/icon",
+  "nuxt-swiper",
+  'vuetify-nuxt-module',
+],
+vuetify: {
+  vuetifyOptions: {
+    theme: {
+      defaultTheme: 'light',
+      themes: {
+        light: {
+          colors: {
+            primary: '#293896',
+            secondary: '#5CBBF6',
+            accent: '#FF4081',
+            background: '#FFFFFF',
+            surface: '#FFFFFF',
+            error: '#B00020',
+            info: '#2196F3',
+            success: '#4CAF50',
+            warning: '#FB8C00',
+          },
+        },
+        dark: {
+          colors: {
+            primary: '#2196F3',
+            secondary: '#424242',
+            accent: '#FF4081',
+            background: '#121212',
+            surface: '#1E1E1E',
+            error: '#CF6679',
+            info: '#BB86FC',
+            success: '#03DAC6',
+            warning: '#FB8C00',
+          },
+        },
       },
     },
-    vue: {
-      template: {
-        transformAssetUrls,
-      },
+    locale: {
+      rtl: { fa: true }, // RTL برای فارسی
+    },
+    icons: {
+      defaultSet: 'mdi',
     },
   },
-  css: [
-    "vuetify/lib/styles/main.sass", // اضافه کردن استایل‌های اصلی Vuetify
-    "@mdi/font/css/materialdesignicons.min.css", // اضافه کردن آیکون‌ها
-    "./app/assets/css/main.css", // اضافه کردن فایل CSS Tailwind
-  ],
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {},
-    },
+  moduleOptions: {
+    styles: 'sass', // برای استایل‌ها
   },
+},
 
-  icon: {
-    customCollections: [
-      {
-        prefix: "maizu-icons",
-        dir: "./app/assets/maizu-icons",
-      },
-    ],
-  },
+  css: [
+    "./app/assets/css/main.css",
+  ],
 
   image: {
     // برای تصاویر محلی، provider پیش‌فرض IPX کافیه
@@ -71,5 +80,4 @@ export default defineNuxtConfig({
       },
     },
   },
-  plugins: ["../app/plugins/vuetify.ts"],
 });
