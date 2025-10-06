@@ -88,11 +88,13 @@ onMounted(() => {
     ) {
       isDark.value = true;
       document.documentElement.classList.add("dark");
-      vuetifyTheme.global.name.value = "dark";
+      vuetifyTheme.change("dark");
+      // vuetifyTheme.global.name.value = "dark";
     } else {
       isDark.value = false;
       document.documentElement.classList.remove("dark");
-      vuetifyTheme.global.name.value = "light";
+      vuetifyTheme.change("light");
+      // vuetifyTheme.global.name.value = "light";
     }
   }
 
@@ -107,11 +109,13 @@ function toggleTheme() {
     if (isDark.value) {
       document.documentElement.classList.add("dark");
       localStorage.setItem("theme", "dark");
-      vuetifyTheme.global.name.value = "dark";
+      vuetifyTheme.change("dark");
+      // vuetifyTheme.global.name.value = "dark";
     } else {
       document.documentElement.classList.remove("dark");
       localStorage.setItem("theme", "light");
-      vuetifyTheme.global.name.value = "light";
+      vuetifyTheme.change("light");
+      // vuetifyTheme.global.name.value = "light";
     }
   }
 }

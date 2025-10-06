@@ -5,3 +5,9 @@
 * {
   font-family: "Vazirmatn";
 }
+.desktop-view {
+  @apply hidden lg:block !important;
+}
+.mobile-view {
+  @apply lg:hidden !important;
+}

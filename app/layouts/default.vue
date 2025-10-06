@@ -49,11 +49,13 @@ onMounted(() => {
     ) {
       isDark.value = true;
       document.documentElement.classList.add("dark");
-      vuetifyTheme.global.name.value = "dark";
+      vuetifyTheme.change("dark");
+      // vuetifyTheme.global.name.value = "dark";
     } else {
       isDark.value = false;
       document.documentElement.classList.remove("dark");
-      vuetifyTheme.global.name.value = "light";
+      vuetifyTheme.change("light");
+      // vuetifyTheme.global.name.value = "light";
     }
   }
 });
@@ -64,11 +66,13 @@ function toggleTheme() {
     if (isDark.value) {
       document.documentElement.classList.add("dark");
       localStorage.setItem("theme", "dark");
-      vuetifyTheme.global.name.value = "dark";
+      // vuetifyTheme.global.name.value = "dark";
+      vuetifyTheme.change("dark");
     } else {
       document.documentElement.classList.remove("dark");
       localStorage.setItem("theme", "light");
-      vuetifyTheme.global.name.value = "light";
+      // vuetifyTheme.global.name.value = "light";
+      vuetifyTheme.change("light");
     }
   }
 }
@@ -80,25 +84,55 @@ function onSearch() {
     loaded.value = true;
   }, 2000);
 }
+
+function updateRoute(name: string) {
+  console.log(name);
+
+  switch (name) {
+    case "home":
+      useRouter().push("/");
+      break;
+    case "categories":
+      drawer.value = true;
+      break;
+    case "account-info'":
+      useRouter().push("/Dashboard/account-info");
+      break;
+    case "cart":
+      useRouter().push("/cart");
+      break;
+
+    default:
+      break;
+  }
+}
 </script>
 
 <template>
   <v-app :theme="vuetifyTheme.global.name.value">
-    <v-app-bar height="135">
-      <div class="flex flex-column w-full mt-5">
+    <v-app-bar class="custom-app-bar">
+      <div class="flex flex-column w-full lg:mt-3">
         <div class="flex items-center">
-          <v-btn style="background-color: #293896" class="mx-4 text-white" size="3rem">
+          <v-btn
+            style="background-color: #293896"
+            class="desktop-view mx-4 text-white"
+            size="3rem"
+          >
             <Icon name="carbon:shopping-cart" class="text-2xl" />
           </v-btn>
 
           <v-btn
             v-if="!authStore.isAuthenticated"
             style="background-color: #293896; color: white; height: 3rem"
+            class="desktop-view"
             ><NuxtLink to="/login"> ورود | ثبت نام</NuxtLink></v-btn
           >
-          <MenuProfileVue v-if="authStore.isAuthenticated" />
+          <MenuProfileVue v-if="authStore.isAuthenticated" class="desktop-view" />
 
-          <div v-if="!authStore.isAuthenticated" class="flex items-center gap-3 ml-5">
+          <div
+            v-if="!authStore.isAuthenticated"
+            class="desktop-view flex items-center gap-3 ml-5"
+          >
             <v-icon :icon="isDark ? 'mdi-white-balance-sunny' : 'mdi-weather-night'" />
             <v-switch
               v-model="isDark"
@@ -107,9 +141,15 @@ function onSearch() {
               @click="toggleTheme"
             />
           </div>
+          <button
+            style="background-color: #293896; color: white"
+            class="mobile-view ml-4 !w-10 p-2 rounded flex items-center justify-center"
+          >
+            <Icon name="heroicons:magnifying-glass-16-solid" class="text-lg" />
+          </button>
 
           <v-spacer />
-          <div class="w-[40%] relative mr-5">
+          <div class="hidden lg:block lg:w-[40%] relative mr-5">
             <v-locale-provider rtl>
               <v-card-text>
                 <v-text-field
@@ -133,19 +173,21 @@ function onSearch() {
               src="/images/brand-2.png"
               loading="lazy"
               quality="80"
-              class="h-12 mr-5 dark:bg-white dark:bg-opacity-80 dark:rounded-md"
+              class="h-7 lg:h-12 mr-5 dark:bg-white dark:bg-opacity-80 dark:rounded-md"
               draggable="false"
             />
           </NuxtLink>
         </div>
 
-        <div class="flex flex-row-reverse items-center justify-between gap-5 mr-4 mt-5">
+        <div
+          class="hidden lg:flex flex-row-reverse items-center justify-between mr-4 mt-2"
+        >
           <div class="flex flex-row-reverse">
             <v-btn class="flex items-center" @click="drawer = !drawer">
               <p>دسته بندی محصولات</p>
-              <Icon name="heroicons:bars-3-16-solid" class="text-2xl ml-5" />
+              <Icon name="heroicons:bars-3-16-solid" class="text-2xl ml-3" />
             </v-btn>
-
+            <v-spacer class="mx-3" />
             <v-btn
               ><p class="mr-2">کامپیوتر</p>
               <Icon name="carbon:screen" />
@@ -174,17 +216,15 @@ function onSearch() {
           </v-btn>
         </div>
       </div>
-
-      <!-- <v-spacer /> -->
     </v-app-bar>
     <v-main>
       <v-container>
-        <v-locale-provider rtl>
+        <v-locale-provider class="desktop-view" rtl>
           <v-navigation-drawer
             v-model="drawer"
             location="right"
             temporary
-            class="full-width-drawer"
+            class="lg:mt-10"
           >
             <v-btn v-if="drawer" icon class="close-btn" @click="drawer = false">
               <Icon name="heroicons:x-mark-20-solid" class="text-2xl" />
@@ -196,7 +236,6 @@ function onSearch() {
                   :key="index"
                   class="category-item"
                 >
-                  <!-- آیتم اصلی دسته‌بندی با هاور -->
                   <v-menu open-on-hover location="start" :close-on-content-click="false">
                     <template #activator="{ props }">
                       <v-list-item-title
@@ -222,7 +261,6 @@ function onSearch() {
                         <v-icon><Icon name="heroicons:chevron-left-16-solid" /></v-icon>
                       </v-list-item-title>
                     </template>
-                    <!-- منوی زیرمجموعه‌ها -->
                     <v-list class="submenu">
                       <v-list-item
                         v-for="(subItem, subIndex) in category.subCategories"
@@ -241,6 +279,7 @@ function onSearch() {
           </v-navigation-drawer>
         </v-locale-provider>
         <slot />
+        <NavigationMobile @change-route="updateRoute" />
       </v-container>
     </v-main>
   </v-app>
@@ -252,6 +291,10 @@ ul {
 }
 .v-card-text {
   @apply py-0 !important;
+}
+
+.custom-app-bar :deep(.v-toolbar__content) {
+  @apply h-12 lg:h-28 !important; /* :deep برای penetration به child elements Vuetify */
 }
 
 /* استایل‌های منوی کناری */

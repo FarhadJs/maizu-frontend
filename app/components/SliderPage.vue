@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const containerRef = ref(null);
 const slides = ref(Array.from({ length: 10 }));
-const swiper = useSwiper(containerRef, {
+useSwiper(containerRef, {
   effect: "slide",
   loop: true,
   autoplay: {
@@ -25,15 +25,15 @@ const swiper = useSwiper(containerRef, {
     clickable: true,
   },
 });
-
-onMounted(() => {
-  console.log(swiper.instance);
-});
 </script>
 
 <template>
   <ClientOnly>
-    <swiper-container ref="containerRef" class="absolute left-0 right-0 top-36" :init="false">
+    <swiper-container
+      ref="containerRef"
+      class="absolute left-0 right-0 top-12 lg:top-28"
+      :init="false"
+    >
       <swiper-slide
         v-for="(slide, idx) in slides"
         :key="idx"
