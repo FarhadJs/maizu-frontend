@@ -41,7 +41,7 @@ async function requestOtp() {
   successMessage.value = null;
 
   try {
-    await ofetch("http://localhost:3001/auth/request-otp", {
+    await ofetch("/api/auth/request-otp", {
       method: "POST",
       body: { phoneNumber: phoneNumber.value },
     });
@@ -69,7 +69,7 @@ async function verifyOtp() {
   successMessage.value = null;
 
   try {
-    const response = await ofetch("http://localhost:3001/auth/verify-otp", {
+    const response = await ofetch("/api/auth/verify-otp", {
       method: "POST",
       body: {
         phoneNumber: phoneNumber.value,
@@ -105,10 +105,10 @@ async function verifyOtp() {
 
 <template>
   <v-app>
-    <v-main class="d-flex align-center justify-center">
+    <v-main class="d-flex align-center justify-center mx-4">
       <v-card class="pa-6 border drop-shadow-lg" width="450" flat>
         <v-card-title class="text-h5 text-center mb-4">
-          <span class="text-primary">Maizu</span>
+          <NuxtLink to="/" class="text-primary">Maizu</NuxtLink>
           <p>ورود / ثبت‌نام</p>
         </v-card-title>
         <v-card-text>

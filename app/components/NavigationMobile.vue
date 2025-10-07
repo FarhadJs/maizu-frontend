@@ -1,56 +1,100 @@
 <template>
-  <!-- <v-layout class="overflow-visible" style="height: 56px"> -->
-  <v-bottom-navigation v-model="value" :bg-color="color" mode="shift" class="lg:hidden">
-    <v-btn @click="changeRouter('account-info')">
-      <v-icon class="nav-desktop-view"><Icon name="heroicons:user" /></v-icon>
-
-      <span>حساب کاربری</span>
-    </v-btn>
-
-    <v-btn @click="changeRouter('cart')">
-      <v-icon class="nav-desktop-view"><Icon name="carbon:shopping-cart" /></v-icon>
-
-      <span>سبد خرید</span>
-    </v-btn>
-
-    <v-btn @click="changeRouter('categories')">
-      <v-icon class="nav-desktop-view"><Icon name="iconamoon:category-light" /></v-icon>
-
-      <span>دسته بندی ها</span>
-    </v-btn>
-
-    <v-btn @click="changeRouter('home')">
-      <v-icon class="nav-desktop-view"><Icon name="carbon:home" /></v-icon>
-
-      <span>خانه</span>
+  <v-bottom-navigation
+    v-model="navIndex"
+    :bg-color="color"
+    mode="shift"
+    class="lg:!hidden"
+    grow
+  >
+    <v-btn
+      v-for="(item, index) in menuItems"
+      :key="index"
+      :value="index"
+      @click="changeRoute(item.routeName)"
+    >
+      <v-icon class="nav-desktop-view">
+        <Icon :name="item.icon" />
+      </v-icon>
+      <span class="text-[10px]">{{ item.title }}</span>
     </v-btn>
   </v-bottom-navigation>
-  <!-- </v-layout> -->
 </template>
-<script setup>
-import { computed, ref } from "vue";
-defineEmits(["changeRoute"]);
 
-const value = ref(1);
+<script setup lang="ts">
+import { computed, ref } from "vue";
+
+// const navIndex = defineModel<number>("navIndex", { default: 3 });
+
+const route = useRoute();
+const emits = defineEmits<{
+  (e: "changeRoute", routeName: string): void;
+}>();
+
+// Dynamic menu items for flexibility
+const menuItems = [
+  {
+    title: "حساب کاربری",
+    icon: "heroicons:user",
+    routeName: "account-info",
+  },
+  {
+    title: "سبد خرید",
+    icon: "carbon:shopping-cart",
+    routeName: "cart",
+  },
+  {
+    title: "دسته بندی ها",
+    icon: "iconamoon:category-light",
+    routeName: "categories",
+  },
+  {
+    title: "خانه",
+    icon: "carbon:home",
+    routeName: "home",
+  },
+] as const;
+
+const navIndex = ref(3); // Default to home (index 3)
+
 const color = computed(() => {
-  switch (value.value) {
-    case 0:
-      return "blue-grey";
-    case 1:
-      return "teal";
-    case 2:
-      return "brown";
-    case 3:
-      return "indigo";
-    default:
-      return "blue-grey";
-  }
+  const colors = ["blue-grey", "teal", "brown", "indigo"];
+  return colors[navIndex.value] || "blue-grey";
 });
 
-function changeRouter(name) {
-  console.log(name);
+// Watch route changes to update active tab (SSR-safe initial load via onMounted if needed)
 
-  defineEmits("changeRoute")({ message: name });
+onMounted(() => {
+  switch (route.path) {
+    case "/Dashboard/account-info":
+      navIndex.value = 0;
+      break;
+    case "/cart":
+      navIndex.value = 1;
+      break;
+    case "/categories":
+      navIndex.value = 2;
+      break;
+    case "/":
+      navIndex.value = 3;
+      break;
+    default:
+      navIndex.value = -1; // No active
+      break;
+  }
+});
+// If needed, force re-watch on client if hydration mismatch occurs
+// if (import.meta.client && value.value === -1) {
+//   value.value = 3;
+//   // Re-run the switch logic here if necessary
+// }
+
+function changeRoute(routeName: string) {
+  emits("changeRoute", routeName);
+  // Optionally set value immediately for instant UI feedback
+  const index = menuItems.findIndex((item) => item.routeName === routeName);
+  if (index !== -1) {
+    navIndex.value = index;
+  }
 }
 </script>
 

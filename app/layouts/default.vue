@@ -12,33 +12,33 @@ const loaded = ref(false);
 const loading = ref(false);
 const drawer = ref(false);
 
-const productCategories = [
-  {
-    title: "محصولات الکترونیکی",
-    link: "/",
-    subCategories: [
-      { title: "موبایل", link: "/" },
-      { title: "لپ‌تاپ", link: "/" },
-      { title: "لوازم جانبی", link: "/" },
-    ],
-  },
-  {
-    title: "لباس و مد",
-    link: "/",
-    subCategories: [
-      { title: "مردانه", link: "/" },
-      { title: "زنانه", link: "/" },
-    ],
-  },
-  {
-    title: "کتاب‌ها",
-    link: "/",
-    subCategories: [
-      { title: "رمان", link: "/" },
-      { title: "علمی", link: "/" },
-    ],
-  },
-];
+// const productCategories = [
+//   {
+//     title: "محصولات الکترونیکی",
+//     link: "/",
+//     subCategories: [
+//       { title: "موبایل", link: "/" },
+//       { title: "لپ‌تاپ", link: "/" },
+//       { title: "لوازم جانبی", link: "/" },
+//     ],
+//   },
+//   {
+//     title: "لباس و مد",
+//     link: "/",
+//     subCategories: [
+//       { title: "مردانه", link: "/" },
+//       { title: "زنانه", link: "/" },
+//     ],
+//   },
+//   {
+//     title: "کتاب‌ها",
+//     link: "/",
+//     subCategories: [
+//       { title: "رمان", link: "/" },
+//       { title: "علمی", link: "/" },
+//     ],
+//   },
+// ];
 
 onMounted(() => {
   if (import.meta.client) {
@@ -91,7 +91,7 @@ function updateRoute(name: string) {
     case "categories":
       drawer.value = true;
       break;
-    case "account-info'":
+    case "account-info":
       useRouter().push("/Dashboard/account-info");
       break;
     case "cart":
@@ -109,13 +109,15 @@ function updateRoute(name: string) {
     <v-app-bar class="custom-app-bar">
       <div class="flex flex-column w-full lg:mt-1">
         <div class="flex items-center">
-          <v-btn
-            style="background-color: #293896"
-            class="desktop-view mx-4 text-white"
-            size="3rem"
-          >
-            <Icon name="carbon:shopping-cart" class="text-2xl" />
-          </v-btn>
+          <NuxtLink to="/cart">
+            <v-btn
+              style="background-color: #293896"
+              class="desktop-view mx-4 text-white"
+              size="3rem"
+            >
+              <Icon name="carbon:shopping-cart" class="text-2xl" />
+            </v-btn>
+          </NuxtLink>
 
           <client-only>
             <template v-if="!authStore.isAuthenticated">
@@ -130,10 +132,7 @@ function updateRoute(name: string) {
           </client-only>
 
           <client-only>
-            <div
-              
-              class="hidden lg:!flex items-center gap-3 ml-5"
-            >
+            <div class="hidden lg:!flex items-center gap-3 ml-5">
               <v-icon :icon="isDark ? 'mdi-white-balance-sunny' : 'mdi-weather-night'" />
               <v-switch
                 v-model="isDark"
@@ -225,12 +224,15 @@ function updateRoute(name: string) {
     <v-main>
       <client-only>
         <v-container>
-          <v-locale-provider class="desktop-view" :rtl="true">
-            <v-navigation-drawer
+          <v-locale-provider :rtl="true">
+            <MenuPage v-model:drawer="drawer" />
+
+            <!-- <v-navigation-drawer
               v-model="drawer"
               location="right"
               temporary
-              class="lg:mt-10"
+              class="mobile-menu"
+              :class="drawer? '!translate-x-0':'!translate-x-96'"
             >
               <v-btn v-if="drawer" icon class="close-btn" @click="drawer = false">
                 <Icon name="heroicons:x-mark-20-solid" class="text-2xl" />
@@ -286,7 +288,7 @@ function updateRoute(name: string) {
                   </v-list-item>
                 </v-list>
               </div>
-            </v-navigation-drawer>
+            </v-navigation-drawer> -->
           </v-locale-provider>
           <slot />
           <NavigationMobile @change-route="updateRoute" />
@@ -313,9 +315,9 @@ ul {
 /* نوار باریک برای دسته‌بندی‌ها */
 .sidebar-content {
   display: flex;
-  justify-content: flex-end;
   height: 100%;
   position: relative;
+  @apply items-end pt-4;
 }
 
 .category-list {
@@ -346,10 +348,14 @@ ul {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   min-width: 200px;
   border-radius: 4px;
+  @apply !absolute !top-0 !left-0 !z-50;
 }
 
+.mobile-menu {
+  @apply lg:mt-10 -mt-4 !w-screen !h-screen;
+}
 /* دکمه بستن منوی کناری */
 .close-btn {
-  @apply bg-transparent absolute top-3 -left-16 z-50;
+  @apply bg-transparent absolute lg:top-3 lg:-left-16 z-50;
 }
 </style>

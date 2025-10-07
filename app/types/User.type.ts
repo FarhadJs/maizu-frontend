@@ -5,7 +5,7 @@ export enum UserRole {
 }
 
 export interface User {
-  _id: string; // شناسه یکتا که توسط MongoDB تولید می‌شود
+  id: string; // شناسه یکتا که توسط MongoDB تولید می‌شود
   phoneNumber: string; // شماره تلفن ایرانی (مثل 09123456789)
   role: UserRole; // نقش کاربر (customer, admin, super_admin)
   firstName?: string; // نام (اختیاری)

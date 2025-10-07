@@ -7,7 +7,7 @@ const error = ref('');
 
 onMounted(async () => {
     try {
-        const response = await ofetch('http://localhost:3001/test/message');
+        const response = await ofetch('api/test/message');
         backendMessage.value = response; // ofetch خودش JSON را parse می‌کند
     } catch (err) {
         console.error('Error fetching from backend:', err);

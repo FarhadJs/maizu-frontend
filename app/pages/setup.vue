@@ -40,7 +40,7 @@ async function submitSetupForm() {
   successMessage.value = null;
 
   try {
-    const response = await ofetch("http://localhost:3001/auth/setup-super-admin", {
+    const response = await ofetch("/api/auth/setup-super-admin", {
       method: "POST",
       body: {
         phoneNumber: phoneNumber.value,
