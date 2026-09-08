@@ -58,27 +58,13 @@
 import { ref } from "vue";
 import { useTheme } from "vuetify";
 import { useAuthStore } from "../stores/auth";
-// import { useRouter } from "vue-router";
-
-// const router = useRouter();
 const menu = ref(false);
 const vuetifyTheme = useTheme();
 const authStore = useAuthStore();
 const isDark = ref(false);
 const user_info = ref(undefined);
 
-// {
-//     "id": "68db9de82fdd10c41a6454fe",
-//     "phoneNumber": "09233304531",
-//     "role": "super_admin",
-//     "isProfileCompleted": true,
-//     "firstName": "فرهاد",
-//     "lastName": "فلاحی",
-//     "email": "farhadfallahi2004@gmail.com"
-// }
-
 onMounted(() => {
-  /* ... (منطق تغییر تم بدون تغییر) ... */
   if (import.meta.client) {
     if (
       localStorage.getItem("theme") === "dark" ||
@@ -88,12 +74,10 @@ onMounted(() => {
       isDark.value = true;
       document.documentElement.classList.add("dark");
       vuetifyTheme.change("dark");
-      // vuetifyTheme.global.name.value = "dark";
     } else {
       isDark.value = false;
       document.documentElement.classList.remove("dark");
       vuetifyTheme.change("light");
-      // vuetifyTheme.global.name.value = "light";
     }
   }
 
@@ -109,12 +93,10 @@ function toggleTheme() {
       document.documentElement.classList.add("dark");
       localStorage.setItem("theme", "dark");
       vuetifyTheme.change("dark");
-      // vuetifyTheme.global.name.value = "dark";
     } else {
       document.documentElement.classList.remove("dark");
       localStorage.setItem("theme", "light");
       vuetifyTheme.change("light");
-      // vuetifyTheme.global.name.value = "light";
     }
   }
 }
@@ -122,7 +104,7 @@ function toggleTheme() {
 async function handleLogout() {
   const loggedOut = await authStore.logout();
   if (loggedOut) {
-    location.pathname = "/login"; // هدایت به صفحه ورود پس از خروج موفق
+    location.pathname = "/login";
   }
 }
 </script>

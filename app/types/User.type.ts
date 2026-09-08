@@ -5,14 +5,14 @@ export enum UserRole {
 }
 
 export interface User {
-  id: string; // شناسه یکتا که توسط MongoDB تولید می‌شود
-  phoneNumber: string; // شماره تلفن ایرانی (مثل 09123456789)
-  role: UserRole; // نقش کاربر (customer, admin, super_admin)
-  firstName?: string; // نام (اختیاری)
-  lastName?: string; // نام خانوادگی (اختیاری)
-  email?: string; // ایمیل (اختیاری)
-  nationalCode?: string; // کد ملی (اختیاری)
-  postalCode?: string; // کد پستی (اختیاری)
-  address?: string; // آدرس کامل (اختیاری)
-  isProfileCompleted: boolean; // آیا پروفایل تکمیل شده است
+  id: string;
+  phoneNumber: string;
+  role: UserRole;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  nationalCode?: string;
+  postalCode?: string;
+  address?: string;
+  isProfileCompleted: boolean;
 }

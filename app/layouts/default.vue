@@ -12,34 +12,6 @@ const loaded = ref(false);
 const loading = ref(false);
 const drawer = ref(false);
 
-// const productCategories = [
-//   {
-//     title: "محصولات الکترونیکی",
-//     link: "/",
-//     subCategories: [
-//       { title: "موبایل", link: "/" },
-//       { title: "لپ‌تاپ", link: "/" },
-//       { title: "لوازم جانبی", link: "/" },
-//     ],
-//   },
-//   {
-//     title: "لباس و مد",
-//     link: "/",
-//     subCategories: [
-//       { title: "مردانه", link: "/" },
-//       { title: "زنانه", link: "/" },
-//     ],
-//   },
-//   {
-//     title: "کتاب‌ها",
-//     link: "/",
-//     subCategories: [
-//       { title: "رمان", link: "/" },
-//       { title: "علمی", link: "/" },
-//     ],
-//   },
-// ];
-
 onMounted(() => {
   if (import.meta.client) {
     if (
@@ -49,7 +21,7 @@ onMounted(() => {
     ) {
       isDark.value = true;
       document.documentElement.classList.add("dark");
-      vuetifyTheme.change("dark"); // فیکس deprecation
+      vuetifyTheme.change("dark");
     } else {
       isDark.value = false;
       document.documentElement.classList.remove("dark");
@@ -173,13 +145,15 @@ function updateRoute(name: string) {
             </div>
           </client-only>
           <NuxtLink to="/">
-            <NuxtImg
-              src="/images/brand-2.png"
-              loading="lazy"
-              quality="80"
-              class="h-7 lg:h-12 mr-5 dark:bg-white dark:bg-opacity-80 dark:rounded-md"
+            <img
+              src="/images/brand.png"
+              alt="Maizu"
+              width="201"
+              height="52"
+              loading="eager"
+              class="w-auto h-7 lg:h-12 mr-5 object-contain dark:bg-white dark:bg-opacity-80 dark:rounded-md"
               draggable="false"
-            />
+            >
           </NuxtLink>
         </div>
 
@@ -227,68 +201,6 @@ function updateRoute(name: string) {
           <v-locale-provider :rtl="true">
             <MenuPage v-model:drawer="drawer" />
 
-            <!-- <v-navigation-drawer
-              v-model="drawer"
-              location="right"
-              temporary
-              class="mobile-menu"
-              :class="drawer? '!translate-x-0':'!translate-x-96'"
-            >
-              <v-btn v-if="drawer" icon class="close-btn" @click="drawer = false">
-                <Icon name="heroicons:x-mark-20-solid" class="text-2xl" />
-              </v-btn>
-              <div class="sidebar-content">
-                <v-list nav class="category-list">
-                  <v-list-item
-                    v-for="(category, index) in productCategories"
-                    :key="index"
-                    class="category-item"
-                  >
-                    <v-menu
-                      open-on-hover
-                      location="start"
-                      :close-on-content-click="false"
-                    >
-                      <template #activator="{ props }">
-                        <v-list-item-title
-                          v-bind="props"
-                          style="
-                            padding: 10px;
-                            font-size: large;
-                            font-weight: 500;
-                            width: 14rem;
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-                          "
-                          class="hover:bg-[#00b9ec2a] focus-within:bg-[#00b9ec2a] dark:hover:bg-[#00b9ec9f] dark:focus-within:bg-[#00b9ec9f] rounded"
-                        >
-                          <NuxtLink
-                            :to="category.link"
-                            class="p-2 w-full"
-                            @click="navigateTo(category.link)"
-                          >
-                            <p>{{ category.title }}</p>
-                          </NuxtLink>
-                          <v-icon><Icon name="heroicons:chevron-left-16-solid" /></v-icon>
-                        </v-list-item-title>
-                      </template>
-                      <v-list class="submenu">
-                        <v-list-item
-                          v-for="(subItem, subIndex) in category.subCategories"
-                          :key="subIndex"
-                          @click="navigateTo(subItem.link)"
-                        >
-                          <v-list-item-title class="submenu-title">
-                            {{ subItem.title }}
-                          </v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </v-list-item>
-                </v-list>
-              </div>
-            </v-navigation-drawer> -->
           </v-locale-provider>
           <slot />
           <NavigationMobile @change-route="updateRoute" />
@@ -307,12 +219,9 @@ ul {
 }
 
 .custom-app-bar :deep(.v-toolbar__content) {
-  @apply h-12 lg:h-28 !important; /* :deep برای penetration به child elements Vuetify */
+  @apply h-12 lg:h-28 !important;
 }
 
-/* استایل‌های منوی کناری */
-
-/* نوار باریک برای دسته‌بندی‌ها */
 .sidebar-content {
   display: flex;
   height: 100%;
@@ -321,7 +230,7 @@ ul {
 }
 
 .category-list {
-  width: 300px; /* عرض نوار باریک */
+  width: 300px;
   padding: 16px;
   height: 100%;
   overflow-y: auto;
@@ -342,7 +251,6 @@ ul {
   margin-left: 8px;
 }
 
-/* استایل منوی زیرمجموعه‌ها */
 .submenu {
   background: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -354,7 +262,6 @@ ul {
 .mobile-menu {
   @apply lg:mt-10 -mt-4 !w-screen !h-screen;
 }
-/* دکمه بستن منوی کناری */
 .close-btn {
   @apply bg-transparent absolute lg:top-3 lg:-left-16 z-50;
 }

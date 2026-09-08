@@ -7,9 +7,9 @@ module.exports = {
     "./plugins/**/*.{js,ts}",
     "./app.vue",
     "./error.vue",
-    "./nuxt.config.ts", // برای اطمینان از اسکن Nuxt config
+    "./nuxt.config.ts",
   ],
-  darkMode: "class", // برای فعال‌سازی تم دارک/روشن با کلاس 'dark' در تگ html
+  darkMode: "class",
   theme: {
     extend: {},
   },

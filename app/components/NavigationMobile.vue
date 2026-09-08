@@ -23,14 +23,11 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 
-// const navIndex = defineModel<number>("navIndex", { default: 3 });
-
 const route = useRoute();
 const emits = defineEmits<{
   (e: "changeRoute", routeName: string): void;
 }>();
 
-// Dynamic menu items for flexibility
 const menuItems = [
   {
     title: "حساب کاربری",
@@ -54,14 +51,12 @@ const menuItems = [
   },
 ] as const;
 
-const navIndex = ref(3); // Default to home (index 3)
+const navIndex = ref(3);
 
 const color = computed(() => {
   const colors = ["blue-grey", "teal", "brown", "indigo"];
   return colors[navIndex.value] || "blue-grey";
 });
-
-// Watch route changes to update active tab (SSR-safe initial load via onMounted if needed)
 
 onMounted(() => {
   switch (route.path) {
@@ -82,15 +77,8 @@ onMounted(() => {
       break;
   }
 });
-// If needed, force re-watch on client if hydration mismatch occurs
-// if (import.meta.client && value.value === -1) {
-//   value.value = 3;
-//   // Re-run the switch logic here if necessary
-// }
-
 function changeRoute(routeName: string) {
   emits("changeRoute", routeName);
-  // Optionally set value immediately for instant UI feedback
   const index = menuItems.findIndex((item) => item.routeName === routeName);
   if (index !== -1) {
     navIndex.value = index;

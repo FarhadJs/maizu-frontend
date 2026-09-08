@@ -2,7 +2,6 @@ import type { User } from "../types/User.type";
 import { ofetch } from "ofetch";
 
 export default defineNuxtRouteMiddleware(async (to) => {
-  // Shared state برای جلوگیری از flash در hydration (SSR/CSR consistency)
   const authUser = useState<User | null>("auth_user", () => null);
 
   try {

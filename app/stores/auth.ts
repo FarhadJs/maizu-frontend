@@ -7,10 +7,9 @@ interface User {
   phoneNumber: string;
   role: string;
   isProfileCompleted: boolean;
-  firstName?: string; // اضافه کردن فیلدهای پروفایل
+  firstName?: string;
   lastName?: string;
   email?: string;
-  // ... سایر ویژگی‌های کاربر
 }
 
 interface AuthState {
@@ -34,14 +33,13 @@ export const useAuthStore = defineStore("auth", {
     isCustomer: (state) => state.user?.role === "customer",
   },
   actions: {
-    // این متد وضعیت کاربر فعلی را از Back-end دریافت می‌کند
     async fetchUser(): Promise<User | undefined> {
       this.isLoading = true;
       this.error = null;
       try {
         const user = await ofetch<User>("http://localhost:3001/auth/me", {
           method: "GET",
-          credentials: "include", // برای ارسال کوکی‌های سشن
+          credentials: "include",
         });
         this.user = user;
         this.isAuthenticated = true;
@@ -49,7 +47,6 @@ export const useAuthStore = defineStore("auth", {
       } catch (e: any) {
         this.user = null;
         this.isAuthenticated = false;
-        // اگر خطا 401 یا 403 باشد (عدم احراز هویت)، آن را به عنوان یک خطای لاگین معمولی در نظر می‌گیریم
         if (e.response?.status !== 401 && e.response?.status !== 403) {
           console.error("Error fetching user session:", e);
           this.error = "Failed to fetch user session.";
@@ -59,14 +56,12 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    // برای لاگین کردن کاربر در Front-end (پس از تأیید در Back-end)
     async login(userData: User) {
       this.user = userData;
       this.isAuthenticated = true;
       this.error = null;
     },
 
-    // برای خروج کاربر
     async logout() {
       this.isLoading = true;
       this.error = null;
@@ -87,7 +82,6 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    // متدی برای مقداردهی اولیه وضعیت احراز هویت در زمان بارگذاری صفحه
     async initializeAuth() {
       if (!this.isAuthenticated && !this.isLoading) {
         await this.fetchUser();

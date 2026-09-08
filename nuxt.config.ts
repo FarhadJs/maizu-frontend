@@ -50,25 +50,22 @@ export default defineNuxtConfig({
         },
       },
       locale: {
-        rtl: { fa: true }, // RTL برای فارسی
+        rtl: { fa: true },
       },
       icons: {
         defaultSet: "mdi",
       },
     },
     moduleOptions: {
-      styles: "sass", // برای استایل‌ها
+      styles: "sass",
     },
   },
 
   css: ["./app/assets/css/main.css"],
 
   image: {
-    // برای تصاویر محلی، provider پیش‌فرض IPX کافیه
-    provider: "ipx", // یا 'static' برای سادگی
-    // اگر تصاویر خارجی داری، دامنه‌ها رو whitelist کن
-    domains: ["example.com"], // اختیاری
-    // preset برای اندازه‌های رایج
+    provider: "ipx",
+    domains: ["example.com"],
     presets: {
       thumbnail: {
         modifiers: {
