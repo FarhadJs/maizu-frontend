@@ -1,6 +1,6 @@
-# Nuxt Minimal Starter
+# Maizu Frontend
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+**Currently, this source code is not active and the project has been suspended due to lack of funding from the project's customer.**
 
 ## Setup
 
